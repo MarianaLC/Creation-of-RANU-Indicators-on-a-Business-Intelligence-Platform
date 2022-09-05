@@ -1,0 +1,34 @@
+--POVOAMENTOS
+
+-- Povoamento da tabela RN_Primeira
+INSERT INTO "RN_Primeira" (num_seq, avaliacao, data_avaliacao, nmec_avaliador)
+SELECT num_seq, avaliacao, data_avaliacao, nmec_avaliador FROM "Temp_Primeira";
+
+SELECT * FROM "RN_Primeira";
+
+-- Povoamento da tabela RN_Segunda
+INSERT INTO "RN_Segunda" (num_seq, avaliacao, data_avaliacao, nmec_avaliador)
+SELECT num_seq, avaliacao, data_avaliacao, nmec_avaliador FROM "Temp_Segunda";
+
+SELECT * FROM "RN_Segunda";
+
+-- Povoamento da tabela RN_Terceira
+INSERT INTO "RN_Terceira" (num_seq, avaliacao, data_avaliacao, nmec_avaliador)
+SELECT num_seq, avaliacao, data_avaliacao, nmec_avaliador FROM "Temp_Terceira";
+
+SELECT * FROM "RN_Terceira";
+
+-- Povoamento da tabela RN_Rastreios
+INSERT INTO "RN_Rastreios" (num_seq, data_avaliacao, risco, nmec_avaliador, rastreio)
+SELECT num_seq, data_avaliacao, risco, nmec_avaliador, rastreio FROM "Temp_Rastreios";
+
+SELECT * FROM "RN_Rastreios";
+
+-- Povoamento da tabela RN_Nascimentos
+INSERT INTO "RN_Nascimentos" (num_seq, num_processo, data_nascimento, hora_nascimento, semanas_gestacao, peso, sexo, puerperio, local_nascimento, apgar1, apgar5)
+SELECT num_seq, num_processo, data_nascimento, hora_nascimento, semanas_gestacao, peso, sexo, puerperio, local_nascimento, apgar1, apgar5 
+FROM "Temp_Nascimentos";
+
+SELECT * FROM "RN_Nascimentos";
+
+

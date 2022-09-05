@@ -1,0 +1,48 @@
+SELECT * FROM "DW";
+TRUNCATE TABLE "DW";
+
+-- Alteracao Tabela RN_Primeira (Correcao de erro detetado)
+UPDATE "RN_Primeira" SET avaliacao = 2 WHERE avaliacao=6;
+UPDATE "RN_Primeira" SET avaliacao = 3 WHERE avaliacao=5;
+
+--- RN_NASCIMENTOS --> DW
+INSERT INTO "DW"(num_seq,num_processo,data_nascimento,hora_nascimento,semanas_gestacao,peso,sexo,puerperio
+				,local_nascimento,apgar1,apgar5) (SELECT num_seq,num_processo,data_nascimento,hora_nascimento,semanas_gestacao,peso,sexo,puerperio
+				,local_nascimento,apgar1,apgar5 FROM "RN_Nascimentos");
+
+--- RN_Primeira --> DW
+UPDATE "DW" SET avaliacao1 = x2.avaliacao, data_avaliacao1 = x2.data_avaliacao,
+nmec_avaliador1 = x2.nmec_avaliador FROM "RN_Primeira" x2 WHERE "DW".num_seq=x2.num_seq;
+
+--- RN_Rastreios --> DW
+SELECT * FROM "RN_Rastreios";
+UPDATE "DW" SET data_avaliacaor = x2.data_avaliacao, risco = x2.risco,
+nmec_avaliadorr = x2.nmec_avaliador FROM "RN_Rastreios" x2 WHERE "DW".num_seq=x2.num_seq;
+
+--- RN_Segunda --> DW
+UPDATE "DW" SET avaliacao2 = x2.avaliacao, data_avaliacao2 = x2.data_avaliacao,
+nmec_avaliador2 = x2.nmec_avaliador FROM "RN_Segunda" x2 WHERE "DW".num_seq=x2.num_seq;
+
+--- RN_Terceira --> DW
+UPDATE "DW" SET avaliacao3 = x2.avaliacao, data_avaliacao3 = x2.data_avaliacao,
+nmec_avaliador3 = x2.nmec_avaliador FROM "RN_Terceira" x2 WHERE "DW".num_seq=x2.num_seq;
+
+
+SELECT COUNT(*) FROM "RN_Rastreios" x1, "RN_Nascimentos" x2 WHERE x1.num_seq=x2.num_seq;
+
+--- Fatores -->DW
+SELECT * FROM "Fatores" f, "DW" d WHERE f.num_seq=d.num_seq and f.fator=1;
+SELECT COUNT(*) FROM "Fatores" WHERE fator =3;
+UPDATE "DW" SET fator1 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=1;
+UPDATE "DW" SET fator2 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=2;
+UPDATE "DW" SET fator3 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=3;
+UPDATE "DW" SET fator4 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=4;
+UPDATE "DW" SET fator5 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=5;
+UPDATE "DW" SET fator6 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=6;
+UPDATE "DW" SET fator7 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=7;
+UPDATE "DW" SET fator8 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=8;
+UPDATE "DW" SET fator9 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=9;
+UPDATE "DW" SET fator10 = 1 FROM "Fatores" f WHERE "DW".num_seq=f.num_seq and f.fator=10;
+
+
+

@@ -1,0 +1,44 @@
+--Fazer split dos fatores da coluna rastreio
+SELECT rastreio FROM "RN_Rastreios";
+SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',1) AS rastreio FROM "RN_Rastreios") as x;
+
+--Tabela com fatores associados a cada paciente
+--TRUNCATE TABLE "Fatores";
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',1) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',2) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',3) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',4) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',5) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',6) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',7) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',8) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',9) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+INSERT INTO "Fatores" (num_seq,fator) SELECT * FROM (SELECT num_seq,split_part(rastreio::TEXT,';',10) AS rastreio FROM "RN_Rastreios") as x WHERE rastreio NOT LIKE '';
+
+
+--TESTE
+SELECT * FROM "Fatores" WHERE num_seq=149476377 
+
+
+-- Passar os valores para inteiros
+ALTER TABLE "Fatores"
+ALTER COLUMN fator TYPE integer USING (fator::integer);
+	
+--TESTE
+SELECT DISTINCT fator FROM "Fatores" ORDER BY fator desc;
+SELECT COUNT(num_seq) FROM (SELECT DISTINCT num_seq FROM "Fatores") as x; -- Nº de Pacientes com Fatores de risco quer tardio quer normal
+
+-- risco=2: Basta ter pelo menos 1 fator de risco tardio para ser 2, no entanto pode ser um 2 só com fatores de risco tardio e queremos os que tem fatores de risco tbm
+-- Fatores risco tardio= 1,2,4,7,10
+-- Tabela Risco: pacientes c/ fatores de risco tardio e fatores de risco
+INSERT INTO "Risco" (num_seq,fator) SELECT * FROM (SELECT r.num_seq, x.fator FROM "RN_Rastreios" r,"Fatores" x WHERE r.num_seq=x.num_seq AND r.risco=2 AND (x.fator=3 OR x.fator=5 OR x.fator=6 OR x.fator=8 OR x.fator=9)) as m;
+SELECT * FROM "Risco" ORDER BY num_seq;
+SELECT COUNT(num_seq) FROM (SELECT DISTINCT num_seq FROM "Risco") as x; 
+
+SELECT DISTINCT COUNT(num_seq) FROM "RN_Primeira";
+SELECT DISTINCT COUNT(num_seq) FROM "RN_Nascimentos";
+SELECT * FROM "Fatores";
+
+SELECT COUNT(*) FROM "RN_Rastreios" WHERE risco=2;
+SELECT COUNT(*) FROM (SELECT DISTINCT n.num_seq FROM "RN_Rastreios" x, "Fatores" n WHERE x.risco=2  AND x.num_seq=n.num_seq
+					  AND (fator=3 OR fator=5 OR fator=6 OR fator=8 OR fator=9)) as u;

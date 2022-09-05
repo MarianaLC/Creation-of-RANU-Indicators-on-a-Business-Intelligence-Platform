@@ -1,0 +1,33 @@
+TRUNCATE TABLE "RN_Rastreios";
+SELECT * FROM "RN_Rastreios";
+--IMPORT DOS DADOS PARA AS TABELAS TEMPORÁRIAS E PRÉ-PROCESSAMENTO DOS MESMOS
+
+-- TABELA Temp_Primeira
+--Eliminação de linhas com num_seq repetido
+DELETE from "Temp_Primeira" WHERE num_seq IN (SELECT num_seq
+FROM "Temp_Primeira" GROUP BY num_seq
+HAVING COUNT(num_seq) >1);
+
+-- TABELA Temp_Segunda
+--Eliminação de linhas com num_seq repetido
+DELETE from "Temp_Segunda" WHERE num_seq IN (SELECT num_seq
+FROM "Temp_Segunda" GROUP BY num_seq
+HAVING COUNT(num_seq) >1);
+
+-- TABELA Temp_Terceira
+--Eliminação de linhas com num_seq repetido
+DELETE from "Temp_Terceira" WHERE num_seq IN (SELECT num_seq
+FROM "Temp_Terceira" GROUP BY num_seq
+HAVING COUNT(num_seq) >1);
+
+-- TABELA Temp_Rastreios
+--Eliminação de linhas com num_seq repetido
+DELETE from "Temp_Rastreios" WHERE num_seq IN (SELECT num_seq
+FROM "Temp_Rastreios" GROUP BY num_seq
+HAVING COUNT(num_seq) >1);
+
+-- TABELA Temp_Nascimentos
+--Eliminação de linhas com num_seq repetido
+DELETE from "Temp_Nascimentos" WHERE num_seq IN (SELECT num_seq
+FROM "Temp_Nascimentos" GROUP BY num_seq
+HAVING COUNT(num_seq) >1);
